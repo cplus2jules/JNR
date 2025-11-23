@@ -1,0 +1,9 @@
+int x = 10
+int y = 5
+print(x + y)
+char c = 'A'
+print(c)
+float f = 3.14
+print(f)
+int total = x * y
+print(total)
