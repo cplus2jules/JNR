@@ -1,5 +1,7 @@
 # jnr Programming Language
 
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+
 A simple interpreted programming language built with Flex and Bison for CSC 112.
 
 ## Project Structure

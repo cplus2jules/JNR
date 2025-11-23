@@ -344,13 +344,3 @@ Output
 ### Integration Tests
 - `make test-all`: Runs all tests sequentially
 - Verifies: Lexing, parsing, type system, I/O
-
-## Future Enhancements
-
-Possible improvements (not implemented):
-- String type support
-- Arrays/collections
-- Control flow (if/while)
-- Function definitions
-- Better error recovery
-- Optimized symbol table (hash map)
