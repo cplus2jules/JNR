@@ -11,8 +11,6 @@ jnr is a simple programming language where you can:
 - Display results on your screen
 - Ask users for input
 
-Think of it like a calculator that can remember values!
-
 ---
 
 ## Step 1: Check Your Operating System
