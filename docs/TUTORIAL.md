@@ -10,6 +10,14 @@ jnr is a simple programming language where you can:
 - Do math (addition, subtraction, multiplication, division)
 - Display results on your screen
 - Ask users for input
+- Write comments to document your code
+
+**What makes jnr unique?**
+- Uses `!` instead of `;` to end statements (energetic!)
+- Uses `real` instead of `float` for decimal numbers
+- Uses `show()` to display output
+- Uses `ask()` to get input
+- Supports `#` comments like Python
 
 ---
 
@@ -202,9 +210,9 @@ Let's create a simple program!
 
 2. **Type your code:**
    ```
-   int x = 10
-   int y = 20
-   print(x + y)
+   int x = 10!
+   int y = 20!
+   show(x + y)!
    ```
 
 3. **Save and exit:**
@@ -247,43 +255,43 @@ Now the exciting part - running your code!
 
 #### 1. Integers (Whole Numbers)
 ```
-int age = 25
-int score = 100
-print(age)
+int age = 25!
+int score = 100!
+show(age)!
 ```
 **Output:** `25`
 
 #### 2. Characters (Single Letters/Symbols)
 ```
-char grade = 'A'
-char symbol = '!'
-print(grade)
+char grade = 'A'!
+char symbol = '!'!
+show(grade)!
 ```
 **Output:** `A`
 
-#### 3. Floats (Decimal Numbers)
+#### 3. Real Numbers (Decimals)
 ```
-float price = 19.99
-float pi = 3.14
-print(price)
+real price = 19.99!
+real pi = 3.14!
+show(price)!
 ```
 **Output:** `19.99`
 
 ### Doing Math
 
 ```
-int a = 10
-int b = 5
+int a = 10!
+int b = 5!
 
-int sum = a + b
-int diff = a - b
-int product = a * b
-int quotient = a / b
+int sum = a + b!
+int diff = a - b!
+int product = a * b!
+int quotient = a / b!
 
-print(sum)
-print(diff)
-print(product)
-print(quotient)
+show(sum)!
+show(diff)!
+show(product)!
+show(quotient)!
 ```
 
 **Output:**
@@ -294,13 +302,21 @@ print(quotient)
 2
 ```
 
-### Using the Print Function
+### Using the Show Function
 
 ```
-print(10)               Prints: 10
-print('A')              Prints: A
-print(5 + 3)            Prints: 8.00
-print((10 + 5) * 2)     Prints: 30.00
+show(10)!              # Prints: 10.00
+show('A')!             # Prints: A
+show(5 + 3)!           # Prints: 8.00
+show((10 + 5) * 2)!    # Prints: 30.00
+```
+
+### Adding Comments
+
+```
+# This is a comment - it's ignored by the compiler
+int x = 10!  # You can also put comments at the end of lines
+show(x)!
 ```
 
 ---
@@ -309,34 +325,35 @@ print((10 + 5) * 2)     Prints: 30.00
 
 ### Example 1: Age Calculator
 ```
-int birth_year = 2000
-int current_year = 2025
-int age = current_year - birth_year
-print(age)
+int birth_year = 2000!
+int current_year = 2025!
+int age = current_year - birth_year!
+show(age)!
 ```
 
 ### Example 2: Temperature Conversion (Approximation)
 ```
-float celsius = 25.0
-float fahrenheit = celsius * 2.0
-print(fahrenheit)
+real celsius = 25.0!
+real fahrenheit = celsius * 2.0!
+show(fahrenheit)!
 ```
 
 ### Example 3: Circle Area
 ```
-float pi = 3.14159
-float radius = 5.0
-float area = pi * radius * radius
-print(area)
+real pi = 3.14159!
+real radius = 5.0!
+real area = pi * radius * radius!
+show(area)!
 ```
 
 ### Example 4: Shopping Total
 ```
-float item1 = 12.99
-float item2 = 8.50
-float item3 = 5.25
-float total = item1 + item2 + item3
-print(total)
+# Calculate shopping cart total
+real item1 = 12.99!
+real item2 = 8.50!
+real item3 = 5.25!
+real total = item1 + item2 + item3!
+show(total)!
 ```
 
 ---
@@ -432,9 +449,9 @@ They tell you what's wrong:
 
 ### Variable Declaration
 ```
-int name = value       For whole numbers
-char name = 'x'        For single characters
-float name = value     For decimal numbers
+int name = value!      # For whole numbers
+char name = 'x'!       # For single characters
+real name = value!     # For decimal numbers
 ```
 
 ### Math Operators
@@ -443,13 +460,21 @@ float name = value     For decimal numbers
 -    Subtraction
 *    Multiplication
 /    Division
+%    Modulo (remainder)
 ()   Parentheses for order
 ```
 
 ### Functions
 ```
-print(value)           Display output
-print(variable)        Display variable value
+show(value)!           # Display output
+show(variable)!        # Display variable value
+ask(variable)!         # Get user input
+```
+
+### Comments
+```
+# This is a comment
+int x = 10!  # Comments can go at the end too
 ```
 
 ---
@@ -484,8 +509,10 @@ If you get stuck:
 - [ ] Created your first program
 - [ ] Successfully ran the program
 - [ ] Tried the example programs
-- [ ] Understand the three data types (int, char, float)
+- [ ] Understand the three data types (int, char, real)
 - [ ] Can do basic math operations
+- [ ] Know how to use `show()` and `ask()`
+- [ ] Can write comments with `#`
 
 **Congratulations! You're now a jnr programmer!** 🎉
 

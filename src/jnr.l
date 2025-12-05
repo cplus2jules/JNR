@@ -8,23 +8,34 @@
 
 "int"                   { return INT; }
 "char"                  { return CHAR; }
-"float"                 { return FLOAT; }
-"print"                 { return PRINT; }
-"input"                 { return INPUT; }
+"real"                  { return REAL; }
+"show"                  { return SHOW; }
+"ask"                   { return ASK; }
+
+"<="                    { return LTE; }
+">="                    { return GTE; }
+"=="                    { return EQ; }
+"!="                    { return NEQ; }
+
 [0-9]+\.[0-9]+          { yylval.floatval = atof(yytext); return FLOATLIT; }
 [0-9]+                  { yylval.number = atoi(yytext); return NUM; }
 '[^']'                  { yylval.charval = yytext[1]; return CHARLIT; }
 [a-zA-Z][a-zA-Z0-9_]*   { yylval.string = strdup(yytext); return ID; }
+
 "="                     { return ASSIGN; }
 "+"                     { return PLUS; }
 "-"                     { return MINUS; }
 "*"                     { return MULT; }
 "/"                     { return DIV; }
+"%"                     { return MOD; }
+"<"                     { return LT; }
+">"                     { return GT; }
 "("                     { return LPAREN; }
 ")"                     { return RPAREN; }
-[ \t\r]                 ;
-\n                      { return NEWLINE; }
-<<EOF>>                 { static int once = 0; if (!once) { once = 1; return NEWLINE; } else { return 0; } }
+"!"                     { return EXCLAIM; }
+
+"#".*                   ;  /* Hash comments */
+[ \t\r\n]               ;
 .                       { return yytext[0]; }
 
 %%

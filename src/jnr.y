@@ -99,11 +99,15 @@ enum VarType get_symbol_type(char* name) {
 %token <floatval> FLOATLIT
 %token <charval> CHARLIT
 %token <string> ID
-%token INT CHAR FLOAT PRINT INPUT ASSIGN NEWLINE
-%token PLUS MINUS MULT DIV LPAREN RPAREN
+%token INT CHAR REAL SHOW ASK ASSIGN EXCLAIM
+%token PLUS MINUS MULT DIV MOD
+%token LT GT LTE GTE EQ NEQ
+%token LPAREN RPAREN
 
+%left EQ NEQ
+%left LT GT LTE GTE
 %left PLUS MINUS
-%left MULT DIV
+%left MULT DIV MOD
 
 %type <floatval> expr
 
@@ -119,21 +123,16 @@ statement_list:
     ;
 
 statement:
-    declaration NEWLINE
-    | assignment NEWLINE
-    | print_func NEWLINE
-    | input_func NEWLINE
-    | declaration
-    | assignment
-    | print_func
-    | input_func
-    | NEWLINE
+    declaration EXCLAIM
+    | assignment EXCLAIM
+    | print_func EXCLAIM
+    | input_func EXCLAIM
     ;
 
 declaration:
     INT ID ASSIGN expr          { set_symbol_int($2, (int)$4); }
     | CHAR ID ASSIGN CHARLIT    { set_symbol_char($2, $4); }
-    | FLOAT ID ASSIGN expr      { set_symbol_float($2, $4); }
+    | REAL ID ASSIGN expr       { set_symbol_float($2, $4); }
     ;
 
 assignment:
@@ -163,9 +162,9 @@ assignment:
     ;
 
 print_func:
-    PRINT LPAREN expr RPAREN    { printf("%.2f\n", $3); }
-    | PRINT LPAREN CHARLIT RPAREN { printf("%c\n", $3); }
-    | PRINT LPAREN ID RPAREN    {
+    SHOW LPAREN expr RPAREN    { printf("%.2f\n", $3); }
+    | SHOW LPAREN CHARLIT RPAREN { printf("%c\n", $3); }
+    | SHOW LPAREN ID RPAREN    {
         for(int i=0; i<symbolCount; i++) {
             if(strcmp(symbolTable[i].name, $3) == 0) {
                 switch(symbolTable[i].type) {
@@ -189,7 +188,7 @@ print_func:
     ;
 
 input_func:
-    INPUT LPAREN ID RPAREN  { 
+    ASK LPAREN ID RPAREN  { 
         int val;
         printf("Input value for %s: ", $3);
         scanf("%d", &val);
@@ -208,6 +207,13 @@ expr:
         if($3 == 0) { printf("Error: Division by zero\n"); exit(1); }
         $$ = $1 / $3; 
     }
+    | expr MOD expr         { $$ = (float)((int)$1 % (int)$3); }
+    | expr LT expr          { $$ = (float)($1 < $3); }
+    | expr GT expr          { $$ = (float)($1 > $3); }
+    | expr LTE expr         { $$ = (float)($1 <= $3); }
+    | expr GTE expr         { $$ = (float)($1 >= $3); }
+    | expr EQ expr          { $$ = (float)($1 == $3); }
+    | expr NEQ expr         { $$ = (float)($1 != $3); }
     | LPAREN expr RPAREN    { $$ = $2; }
     ;
 

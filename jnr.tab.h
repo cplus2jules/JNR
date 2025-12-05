@@ -35,27 +35,35 @@
 
 /* Tokens.  */
 #ifndef YYTOKENTYPE
-#define YYTOKENTYPE
-
-enum yytokentype {
-  NUM = 258,
-  FLOATLIT = 259,
-  CHARLIT = 260,
-  ID = 261,
-  INT = 262,
-  CHAR = 263,
-  FLOAT = 264,
-  PRINT = 265,
-  INPUT = 266,
-  ASSIGN = 267,
-  NEWLINE = 268,
-  PLUS = 269,
-  MINUS = 270,
-  MULT = 271,
-  DIV = 272,
-  LPAREN = 273,
-  RPAREN = 274
-};
+# define YYTOKENTYPE
+   /* Put the tokens into the symbol table, so that GDB and other debuggers
+      know about them.  */
+   enum yytokentype {
+     NUM = 258,
+     FLOATLIT = 259,
+     CHARLIT = 260,
+     ID = 261,
+     INT = 262,
+     CHAR = 263,
+     REAL = 264,
+     SHOW = 265,
+     ASK = 266,
+     ASSIGN = 267,
+     EXCLAIM = 268,
+     PLUS = 269,
+     MINUS = 270,
+     MULT = 271,
+     DIV = 272,
+     MOD = 273,
+     LT = 274,
+     GT = 275,
+     LTE = 276,
+     GTE = 277,
+     EQ = 278,
+     NEQ = 279,
+     LPAREN = 280,
+     RPAREN = 281
+   };
 #endif
 /* Tokens.  */
 #define NUM 258
@@ -64,33 +72,44 @@ enum yytokentype {
 #define ID 261
 #define INT 262
 #define CHAR 263
-#define FLOAT 264
-#define PRINT 265
-#define INPUT 266
+#define REAL 264
+#define SHOW 265
+#define ASK 266
 #define ASSIGN 267
-#define NEWLINE 268
+#define EXCLAIM 268
 #define PLUS 269
 #define MINUS 270
 #define MULT 271
 #define DIV 272
-#define LPAREN 273
-#define RPAREN 274
+#define MOD 273
+#define LT 274
+#define GT 275
+#define LTE 276
+#define GTE 277
+#define EQ 278
+#define NEQ 279
+#define LPAREN 280
+#define RPAREN 281
 
-#if !defined YYSTYPE && !defined YYSTYPE_IS_DECLARED
+
+
+
+#if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 typedef union YYSTYPE
 #line 91 "src/jnr.y"
 {
-  int number;
-  float floatval;
-  char charval;
-  char *string;
+    int number;
+    float floatval;
+    char charval;
+    char* string;
 }
 /* Line 1529 of yacc.c.  */
-#line 94 "jnr.tab.h"
-YYSTYPE;
-#define yystype YYSTYPE
-#define YYSTYPE_IS_DECLARED 1
-#define YYSTYPE_IS_TRIVIAL 1
+#line 108 "jnr.tab.h"
+	YYSTYPE;
+# define yystype YYSTYPE /* obsolescent; will be withdrawn */
+# define YYSTYPE_IS_DECLARED 1
+# define YYSTYPE_IS_TRIVIAL 1
 #endif
 
 extern YYSTYPE yylval;
+

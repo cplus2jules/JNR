@@ -5,6 +5,173 @@ Complete development history of the **jnr** programming language, built with Fle
 
 ---
 
+## Phase 10: Operator Simplification (JNR v4.0)
+**Date:** December 6, 2025
+
+### Requirement: Simplified Language Specification
+
+**Goal:** Remove bitwise and logical operators to create a simpler, more focused language suitable for introductory programming education.
+
+### Operators Removed
+
+#### Bitwise Operators
+- `&` - Bitwise AND
+- `|` - Bitwise OR  
+- `^` - Bitwise XOR
+- `<<` - Left shift
+- `>>` - Right shift
+
+#### Logical Operators
+- `&&` - Logical AND
+- `||` - Logical OR
+
+### Implementation Changes
+
+#### 1. Lexer Modifications (`jnr.l`)
+
+**Removed Token Definitions:**
+```c
+// Removed logical operators
+"&&"                    { return LOGAND; }
+"||"                    { return LOGOR; }
+
+// Removed shift operators  
+"<<"                    { return LSHIFT; }
+">>"                    { return RSHIFT; }
+
+// Removed bitwise operators
+"&"                     { return BITAND; }
+"|"                     { return BITOR; }
+"^"                     { return BITXOR; }
+```
+
+#### 2. Parser Modifications (`jnr.y`)
+
+**Removed Token Declarations:**
+```c
+%token BITAND BITOR BITXOR
+%token LOGAND LOGOR
+%token LSHIFT RSHIFT
+```
+
+**Removed Precedence Declarations:**
+```c
+%left LOGOR
+%left LOGAND
+%left BITOR
+%left BITXOR
+%left BITAND
+%left LSHIFT RSHIFT
+```
+
+**Removed Expression Grammar Rules:**
+```c
+| expr LOGOR expr       { $$ = (float)((int)$1 || (int)$3); }
+| expr LOGAND expr      { $$ = (float)((int)$1 && (int)$3); }
+| expr BITOR expr       { $$ = (float)((int)$1 | (int)$3); }
+| expr BITXOR expr      { $$ = (float)((int)$1 ^ (int)$3); }
+| expr BITAND expr      { $$ = (float)((int)$1 & (int)$3); }
+| expr LSHIFT expr      { $$ = (float)((int)$1 << (int)$3); }
+| expr RSHIFT expr      { $$ = (float)((int)$1 >> (int)$3); }
+```
+
+### Remaining Operators
+
+JNR v4.0 now supports only the following operators:
+
+#### Arithmetic Operators
+- `+` - Addition
+- `-` - Subtraction
+- `*` - Multiplication
+- `/` - Division
+- `%` - Modulo
+
+#### Comparison Operators
+- `<` - Less than
+- `>` - Greater than
+- `<=` - Less than or equal
+- `>=` - Greater than or equal
+- `==` - Equal to
+- `!=` - Not equal to
+
+### Test File Updates
+
+#### Updated Files
+- `test_operators.jnr` - Commented out bitwise and logical operator tests
+- `test_comprehensive.jnr` - Removed bitwise, shift, and logical operator sections
+
+#### New Test Files
+- `test_allowed_operators.jnr` - Comprehensive test of remaining operators
+- `test_no_bitwise_logical.jnr` - Verification that removed operators produce syntax errors
+
+### Compilation Results
+
+**Build Output:**
+```bash
+make clean && make
+bison -d src/jnr.y
+src/jnr.y: conflicts: 1 shift/reduce
+flex src/jnr.l
+gcc -Wall jnr.tab.c lex.yy.c -o jnr
+```
+
+**Status:** ✅ Successful compilation with expected warnings
+
+### Testing Results
+
+#### Test 1: Allowed Operators
+```bash
+./jnr < tests/test_allowed_operators.jnr
+```
+**Result:** ✅ PASS - All arithmetic and comparison operators work correctly
+
+#### Test 2: Removed Operators Produce Errors
+```bash
+./jnr < tests/test_no_bitwise_logical.jnr
+```
+**Result:** ✅ PASS - Syntax errors for all removed operators
+
+#### Test 3: Comprehensive Test
+```bash
+./jnr < tests/test_comprehensive.jnr
+```
+**Result:** ✅ PASS - All remaining features work correctly
+
+### Rationale
+
+**Why Remove These Operators?**
+
+1. **Educational Focus:** Bitwise and logical operators are advanced concepts not needed for introductory programming
+2. **Simplicity:** Reduces cognitive load for beginners learning basic programming concepts
+3. **Clarity:** Comparison operators (`<`, `>`, `==`, etc.) are more intuitive than logical operators for boolean logic
+4. **Scope:** Aligns with CSC 112 course objectives focusing on fundamental programming concepts
+
+### Breaking Changes
+
+> [!WARNING]
+> **Programs using removed operators will no longer compile**
+> 
+> Any existing JNR programs that use bitwise operators (`&`, `|`, `^`, `<<`, `>>`) or logical operators (`&&`, `||`) will produce syntax errors and must be rewritten using only the remaining operators.
+
+### Migration Guide
+
+**Before (JNR v3.0):**
+```
+int result = (5 > 3) && (10 < 20)!
+```
+
+**After (JNR v4.0):**
+Use comparison operators and nested conditions instead:
+```
+int cond1 = 5 > 3!
+int cond2 = 10 < 20!
+int result = cond1 * cond2!  # Multiply boolean results
+```
+
+---
+
+
+
 ## Phase 1: Initial Project Setup
 **Date:** November 9-10, 2025
 

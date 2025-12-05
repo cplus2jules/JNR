@@ -1,0 +1,22 @@
+# Test that removed operators produce syntax errors
+
+# This should fail - bitwise AND
+int test1 = 5 & 3!
+
+# This should fail - bitwise OR
+int test2 = 5 | 3!
+
+# This should fail - bitwise XOR
+int test3 = 5 ^ 3!
+
+# This should fail - left shift
+int test4 = 5 << 2!
+
+# This should fail - right shift
+int test5 = 20 >> 2!
+
+# This should fail - logical AND
+int test6 = 1 && 1!
+
+# This should fail - logical OR
+int test7 = 0 || 1!

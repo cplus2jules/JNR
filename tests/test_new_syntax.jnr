@@ -1,0 +1,29 @@
+# Test file for new JNR syntax
+# This demonstrates the unique syntax features
+
+int x = 10!
+int y = 20!
+int sum = x + y!
+show(sum)!
+
+# Test real (float) type
+real pi = 3.14159!
+real radius = 5.0!
+real area = pi * radius * radius!
+show(area)!
+
+# Test char type
+char grade = 'A'!
+show(grade)!
+
+# Test bitwise operations
+int a = 12!
+int b = 10!
+int bitwiseAnd = a & b!
+int bitwiseOr = a | b!
+show(bitwiseAnd)!
+show(bitwiseOr)!
+
+# Test comparison
+int result = 5 < 10!
+show(result)!
