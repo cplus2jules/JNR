@@ -150,15 +150,6 @@ Welcome to jnr! (Type your code, Press Ctrl+D to run)
 - Arithmetic follows standard precedence: `*` and `/` before `+` and `-`
 - Variables can be any identifier starting with a letter
 
-## CSC 112 Compliance
-
-✅ All requirements met:
-- FLEX/Bison interpreter system
-- Typed variable declarations (int, char, float)
-- Print statement with type-aware output
-- Simple arithmetic operations
-- Context-Free Grammar in BNF
-
 ## Documentation
 
 See `docs/CHANGELOG.md` for complete development history and all implementation details.
