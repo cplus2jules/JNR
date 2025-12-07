@@ -20,8 +20,7 @@ jnr/
 │   ├── test_input.jnr     # Interactive input test
 │   └── simple.jnr         # Minimal test
 ├── docs/                   # Documentation
-│   ├── README.md          # This file
-│   └── CHANGELOG.md       # Development history
+│   ├── README.md          # You're Here
 ├── scripts/                # Helper scripts
 │   └── run_test.sh        # Test runner
 ├── Makefile               # Build automation
