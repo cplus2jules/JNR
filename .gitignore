@@ -7,3 +7,4 @@
 *.puml
 CHANGELOG.md
 /tests
+/old_files
