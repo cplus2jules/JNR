@@ -33,6 +33,7 @@
 "("                     { return LPAREN; }
 ")"                     { return RPAREN; }
 "!"                     { return EXCLAIM; }
+","                     { return COMMA; }
 
 "#".*                   ;  /* Hash comments */
 [ \t\r\n]               ;

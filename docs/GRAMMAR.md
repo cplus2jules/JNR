@@ -1,7 +1,7 @@
 # jnr Language - Context-Free Grammar
 
 > [!IMPORTANT]
-> **Updated for JNR v4.0** - Simplified operator set! Features `!` statement terminator, `real` keyword, `show()`/`ask()` functions, and `#` comments. Bitwise and logical operators have been removed for educational simplicity.
+> **Updated for JNR v4.1** - Now supports comma-separated variable declarations! Features `!` statement terminator, `real` keyword, `show()`/`ask()` functions, and `#` comments. Declare multiple variables in one statement: `int x=1, y, z=3!`
 
 This document presents the formal Context-Free Grammar (CFG) for the jnr programming language in multiple formats.
 
@@ -22,9 +22,24 @@ This document presents the formal Context-Free Grammar (CFG) for the jnr program
                    | <print-func> "!"
                    | <input-func> "!"
 
-<declaration>    ::= "int" IDENTIFIER "=" <expression>
-                   | "char" IDENTIFIER "=" CHAR-LITERAL
-                   | "real" IDENTIFIER "=" <expression>
+<declaration>    ::= "int" <var-list-int>
+                   | "char" <var-list-char>
+                   | "real" <var-list-real>
+
+<var-list-int>   ::= IDENTIFIER
+                   | IDENTIFIER "=" <expression>
+                   | <var-list-int> "," IDENTIFIER
+                   | <var-list-int> "," IDENTIFIER "=" <expression>
+
+<var-list-char>  ::= IDENTIFIER
+                   | IDENTIFIER "=" CHAR-LITERAL
+                   | <var-list-char> "," IDENTIFIER
+                   | <var-list-char> "," IDENTIFIER "=" CHAR-LITERAL
+
+<var-list-real>  ::= IDENTIFIER
+                   | IDENTIFIER "=" <expression>
+                   | <var-list-real> "," IDENTIFIER
+                   | <var-list-real> "," IDENTIFIER "=" <expression>
 
 <assignment>     ::= IDENTIFIER "=" <expression>
 
@@ -211,7 +226,32 @@ All comparison operators return 1 for true, 0 for false.
 
 ## 8. Sample Programs
 
-### Program 1: Arithmetic Operations
+### Program 1: Comma-Separated Declarations
+```
+# Multiple variables in one statement
+int x = 10, y = 20, z = 30!
+show(x)!
+show(y)!
+show(z)!
+
+# Mixed initialization (some initialized, some not)
+int a = 5, b, c = 15!
+show(a)!
+show(b)!  # Defaults to 0
+show(c)!
+```
+
+**Output:**
+```
+10
+20
+30
+5
+0
+15
+```
+
+### Program 2: Arithmetic Operations
 ```
 int x = 10 + 5 * 2!
 show(x)!
@@ -226,7 +266,7 @@ show(y)!
 2
 ```
 
-### Program 2: Comparison Operations
+### Program 3: Comparison Operations
 ```
 # Comparison example
 int test1 = 5 < 10!
@@ -246,7 +286,7 @@ show(test3)!
 1
 ```
 
-### Program 3: Complex Expressions
+### Program 4: Complex Expressions
 ```
 # Complex precedence example
 int result = 2 + 3 * 4!
@@ -313,13 +353,14 @@ int x = 10!  # Comments can also go at the end of lines
 
 ## 10. Conclusion
 
-This Context-Free Grammar defines the complete syntax of the jnr programming language v4.0. It supports:
+This Context-Free Grammar defines the complete syntax of the jnr programming language v4.1. It supports:
 - Three data types (int, char, real)
+- **Comma-separated variable declarations** (e.g., `int x=1, y, z=3!`)
 - Unique syntax with `!` terminator and `show()`/`ask()` functions
 - Hash-style comments for code documentation
 - Arithmetic expressions with 5 operators (+, -, *, /, %)
 - Comparison operations (6 operators: <, >, <=, >=, ==, !=)
 - Proper operator precedence for educational clarity
-- Type-safe variable declarations
+- Type-safe variable declarations with optional initialization
 
-The grammar is implemented using Bison/Yacc with LALR(1) parsing and has been simplified from v3.0 by removing bitwise and logical operators to focus on fundamental programming concepts suitable for introductory computer science education.
+The grammar is implemented using Bison/Yacc with LALR(1) parsing and has been enhanced in v4.1 to support comma-separated variable declarations, reducing code repetition while maintaining backward compatibility with single-variable declarations.

@@ -99,7 +99,7 @@ enum VarType get_symbol_type(char* name) {
 %token <floatval> FLOATLIT
 %token <charval> CHARLIT
 %token <string> ID
-%token INT CHAR REAL SHOW ASK ASSIGN EXCLAIM
+%token INT CHAR REAL SHOW ASK ASSIGN EXCLAIM COMMA
 %token PLUS MINUS MULT DIV MOD
 %token LT GT LTE GTE EQ NEQ
 %token LPAREN RPAREN
@@ -130,9 +130,30 @@ statement:
     ;
 
 declaration:
-    INT ID ASSIGN expr          { set_symbol_int($2, (int)$4); }
-    | CHAR ID ASSIGN CHARLIT    { set_symbol_char($2, $4); }
-    | REAL ID ASSIGN expr       { set_symbol_float($2, $4); }
+    INT var_list_int
+    | CHAR var_list_char
+    | REAL var_list_real
+    ;
+
+var_list_int:
+    ID ASSIGN expr                      { set_symbol_int($1, (int)$3); }
+    | ID                                { set_symbol_int($1, 0); }
+    | var_list_int COMMA ID ASSIGN expr { set_symbol_int($3, (int)$5); }
+    | var_list_int COMMA ID             { set_symbol_int($3, 0); }
+    ;
+
+var_list_char:
+    ID ASSIGN CHARLIT                       { set_symbol_char($1, $3); }
+    | ID                                    { set_symbol_char($1, '\0'); }
+    | var_list_char COMMA ID ASSIGN CHARLIT { set_symbol_char($3, $5); }
+    | var_list_char COMMA ID                { set_symbol_char($3, '\0'); }
+    ;
+
+var_list_real:
+    ID ASSIGN expr                      { set_symbol_float($1, $3); }
+    | ID                                { set_symbol_float($1, 0.0); }
+    | var_list_real COMMA ID ASSIGN expr { set_symbol_float($3, $5); }
+    | var_list_real COMMA ID            { set_symbol_float($3, 0.0); }
     ;
 
 assignment:

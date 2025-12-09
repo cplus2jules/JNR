@@ -50,19 +50,20 @@
      ASK = 266,
      ASSIGN = 267,
      EXCLAIM = 268,
-     PLUS = 269,
-     MINUS = 270,
-     MULT = 271,
-     DIV = 272,
-     MOD = 273,
-     LT = 274,
-     GT = 275,
-     LTE = 276,
-     GTE = 277,
-     EQ = 278,
-     NEQ = 279,
-     LPAREN = 280,
-     RPAREN = 281
+     COMMA = 269,
+     PLUS = 270,
+     MINUS = 271,
+     MULT = 272,
+     DIV = 273,
+     MOD = 274,
+     LT = 275,
+     GT = 276,
+     LTE = 277,
+     GTE = 278,
+     EQ = 279,
+     NEQ = 280,
+     LPAREN = 281,
+     RPAREN = 282
    };
 #endif
 /* Tokens.  */
@@ -77,19 +78,20 @@
 #define ASK 266
 #define ASSIGN 267
 #define EXCLAIM 268
-#define PLUS 269
-#define MINUS 270
-#define MULT 271
-#define DIV 272
-#define MOD 273
-#define LT 274
-#define GT 275
-#define LTE 276
-#define GTE 277
-#define EQ 278
-#define NEQ 279
-#define LPAREN 280
-#define RPAREN 281
+#define COMMA 269
+#define PLUS 270
+#define MINUS 271
+#define MULT 272
+#define DIV 273
+#define MOD 274
+#define LT 275
+#define GT 276
+#define LTE 277
+#define GTE 278
+#define EQ 279
+#define NEQ 280
+#define LPAREN 281
+#define RPAREN 282
 
 
 
@@ -104,7 +106,7 @@ typedef union YYSTYPE
     char* string;
 }
 /* Line 1529 of yacc.c.  */
-#line 108 "jnr.tab.h"
+#line 110 "jnr.tab.h"
 	YYSTYPE;
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */
 # define YYSTYPE_IS_DECLARED 1

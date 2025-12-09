@@ -6,3 +6,4 @@
 *.DS_Store
 *.puml
 CHANGELOG.md
+/tests
