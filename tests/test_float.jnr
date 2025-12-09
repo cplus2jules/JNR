@@ -1,6 +1,0 @@
-float pi = 3.14159
-float radius = 5.0
-float area = pi * radius * radius
-print(pi)
-print(radius)
-print(area)
