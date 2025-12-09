@@ -1,6 +1,0 @@
-char a = 'H'
-char b = 'i'
-print(a)
-print(b)
-char c = '!'
-print(c)
