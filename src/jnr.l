@@ -8,7 +8,6 @@
 
 "int"                   { return INT; }
 "char"                  { return CHAR; }
-"real"                  { return REAL; }
 "show"                  { return SHOW; }
 "ask"                   { return ASK; }
 
@@ -17,7 +16,6 @@
 "=="                    { return EQ; }
 "!="                    { return NEQ; }
 
-[0-9]+\.[0-9]+          { yylval.floatval = atof(yytext); return FLOATLIT; }
 [0-9]+                  { yylval.number = atoi(yytext); return NUM; }
 '[^']'                  { yylval.charval = yytext[1]; return CHARLIT; }
 [a-zA-Z][a-zA-Z0-9_]*   { yylval.string = strdup(yytext); return ID; }

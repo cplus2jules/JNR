@@ -40,73 +40,68 @@
       know about them.  */
    enum yytokentype {
      NUM = 258,
-     FLOATLIT = 259,
-     CHARLIT = 260,
-     ID = 261,
-     INT = 262,
-     CHAR = 263,
-     REAL = 264,
-     SHOW = 265,
-     ASK = 266,
-     ASSIGN = 267,
-     EXCLAIM = 268,
-     COMMA = 269,
-     PLUS = 270,
-     MINUS = 271,
-     MULT = 272,
-     DIV = 273,
-     MOD = 274,
-     LT = 275,
-     GT = 276,
-     LTE = 277,
-     GTE = 278,
-     EQ = 279,
-     NEQ = 280,
-     LPAREN = 281,
-     RPAREN = 282
+     CHARLIT = 259,
+     ID = 260,
+     INT = 261,
+     CHAR = 262,
+     SHOW = 263,
+     ASK = 264,
+     ASSIGN = 265,
+     EXCLAIM = 266,
+     COMMA = 267,
+     PLUS = 268,
+     MINUS = 269,
+     MULT = 270,
+     DIV = 271,
+     MOD = 272,
+     LT = 273,
+     GT = 274,
+     LTE = 275,
+     GTE = 276,
+     EQ = 277,
+     NEQ = 278,
+     LPAREN = 279,
+     RPAREN = 280
    };
 #endif
 /* Tokens.  */
 #define NUM 258
-#define FLOATLIT 259
-#define CHARLIT 260
-#define ID 261
-#define INT 262
-#define CHAR 263
-#define REAL 264
-#define SHOW 265
-#define ASK 266
-#define ASSIGN 267
-#define EXCLAIM 268
-#define COMMA 269
-#define PLUS 270
-#define MINUS 271
-#define MULT 272
-#define DIV 273
-#define MOD 274
-#define LT 275
-#define GT 276
-#define LTE 277
-#define GTE 278
-#define EQ 279
-#define NEQ 280
-#define LPAREN 281
-#define RPAREN 282
+#define CHARLIT 259
+#define ID 260
+#define INT 261
+#define CHAR 262
+#define SHOW 263
+#define ASK 264
+#define ASSIGN 265
+#define EXCLAIM 266
+#define COMMA 267
+#define PLUS 268
+#define MINUS 269
+#define MULT 270
+#define DIV 271
+#define MOD 272
+#define LT 273
+#define GT 274
+#define LTE 275
+#define GTE 276
+#define EQ 277
+#define NEQ 278
+#define LPAREN 279
+#define RPAREN 280
 
 
 
 
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 typedef union YYSTYPE
-#line 91 "src/jnr.y"
+#line 77 "src/jnr.y"
 {
     int number;
-    float floatval;
     char charval;
     char* string;
 }
 /* Line 1529 of yacc.c.  */
-#line 110 "jnr.tab.h"
+#line 105 "jnr.tab.h"
 	YYSTYPE;
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */
 # define YYSTYPE_IS_DECLARED 1

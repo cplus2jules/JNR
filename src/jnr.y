@@ -6,7 +6,7 @@
 void yyerror(const char *s);
 int yylex();
 
-enum VarType { TYPE_INT, TYPE_CHAR, TYPE_FLOAT };
+enum VarType { TYPE_INT, TYPE_CHAR };
 
 struct Symbol {
     char name[50];
@@ -49,27 +49,13 @@ void set_symbol_char(char* name, char val) {
     symbolCount++;
 }
 
-void set_symbol_float(char* name, float val) {
-    for(int i=0; i<symbolCount; i++) {
-        if(strcmp(symbolTable[i].name, name) == 0) {
-            symbolTable[i].type = TYPE_FLOAT;
-            symbolTable[i].value.floatval = val;
-            return;
-        }
-    }
-    strcpy(symbolTable[symbolCount].name, name);
-    symbolTable[symbolCount].type = TYPE_FLOAT;
-    symbolTable[symbolCount].value.floatval = val;
-    symbolCount++;
-}
 
-float get_symbol(char* name) {
+int get_symbol(char* name) {
     for(int i=0; i<symbolCount; i++) {
         if(strcmp(symbolTable[i].name, name) == 0) {
             switch(symbolTable[i].type) {
-                case TYPE_INT: return (float)symbolTable[i].value.intval;
-                case TYPE_CHAR: return (float)symbolTable[i].value.charval;
-                case TYPE_FLOAT: return symbolTable[i].value.floatval;
+                case TYPE_INT: return symbolTable[i].value.intval;
+                case TYPE_CHAR: return (int)symbolTable[i].value.charval;
             }
         }
     }
@@ -90,16 +76,14 @@ enum VarType get_symbol_type(char* name) {
 
 %union {
     int number;
-    float floatval;
     char charval;
     char* string;
 }
 
 %token <number> NUM
-%token <floatval> FLOATLIT
 %token <charval> CHARLIT
 %token <string> ID
-%token INT CHAR REAL SHOW ASK ASSIGN EXCLAIM COMMA
+%token INT CHAR SHOW ASK ASSIGN EXCLAIM COMMA
 %token PLUS MINUS MULT DIV MOD
 %token LT GT LTE GTE EQ NEQ
 %token LPAREN RPAREN
@@ -109,7 +93,7 @@ enum VarType get_symbol_type(char* name) {
 %left PLUS MINUS
 %left MULT DIV MOD
 
-%type <floatval> expr
+%type <number> expr
 
 %%
 
@@ -132,7 +116,6 @@ statement:
 declaration:
     INT var_list_int
     | CHAR var_list_char
-    | REAL var_list_real
     ;
 
 var_list_int:
@@ -149,12 +132,6 @@ var_list_char:
     | var_list_char COMMA ID                { set_symbol_char($3, '\0'); }
     ;
 
-var_list_real:
-    ID ASSIGN expr                      { set_symbol_float($1, $3); }
-    | ID                                { set_symbol_float($1, 0.0); }
-    | var_list_real COMMA ID ASSIGN expr { set_symbol_float($3, $5); }
-    | var_list_real COMMA ID            { set_symbol_float($3, 0.0); }
-    ;
 
 assignment:
     ID ASSIGN expr              { 
@@ -169,9 +146,6 @@ assignment:
                     case TYPE_CHAR:
                         symbolTable[i].value.charval = (char)$3;
                         break;
-                    case TYPE_FLOAT:
-                        symbolTable[i].value.floatval = $3;
-                        break;
                 }
                 break;
             }
@@ -183,7 +157,7 @@ assignment:
     ;
 
 print_func:
-    SHOW LPAREN expr RPAREN    { printf("%.2f\n", $3); }
+    SHOW LPAREN expr RPAREN    { printf("%d\n", $3); }
     | SHOW LPAREN CHARLIT RPAREN { printf("%c\n", $3); }
     | SHOW LPAREN ID RPAREN    {
         for(int i=0; i<symbolCount; i++) {
@@ -194,9 +168,6 @@ print_func:
                         break;
                     case TYPE_CHAR:
                         printf("%c\n", symbolTable[i].value.charval);
-                        break;
-                    case TYPE_FLOAT:
-                        printf("%.2f\n", symbolTable[i].value.floatval);
                         break;
                 }
                 goto print_done;
@@ -218,8 +189,7 @@ input_func:
     ;
 
 expr:
-    NUM                     { $$ = (float)$1; }
-    | FLOATLIT              { $$ = $1; }
+    NUM                     { $$ = $1; }
     | ID                    { $$ = get_symbol($1); }
     | expr PLUS expr        { $$ = $1 + $3; }
     | expr MINUS expr       { $$ = $1 - $3; }
@@ -228,13 +198,13 @@ expr:
         if($3 == 0) { printf("Error: Division by zero\n"); exit(1); }
         $$ = $1 / $3; 
     }
-    | expr MOD expr         { $$ = (float)((int)$1 % (int)$3); }
-    | expr LT expr          { $$ = (float)($1 < $3); }
-    | expr GT expr          { $$ = (float)($1 > $3); }
-    | expr LTE expr         { $$ = (float)($1 <= $3); }
-    | expr GTE expr         { $$ = (float)($1 >= $3); }
-    | expr EQ expr          { $$ = (float)($1 == $3); }
-    | expr NEQ expr         { $$ = (float)($1 != $3); }
+    | expr MOD expr         { $$ = $1 % $3; }
+    | expr LT expr          { $$ = ($1 < $3); }
+    | expr GT expr          { $$ = ($1 > $3); }
+    | expr LTE expr         { $$ = ($1 <= $3); }
+    | expr GTE expr         { $$ = ($1 >= $3); }
+    | expr EQ expr          { $$ = ($1 == $3); }
+    | expr NEQ expr         { $$ = ($1 != $3); }
     | LPAREN expr RPAREN    { $$ = $2; }
     ;
 
