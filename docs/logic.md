@@ -20,10 +20,8 @@ The lexer performs lexical analysis, converting raw text input into tokens that 
 |---------|-------|-------------|
 | `"int"` | `INT` | Integer type keyword |
 | `"char"` | `CHAR` | Character type keyword |
-| `"float"` | `FLOAT` | Float type keyword |
-| `"print"` | `PRINT` | Print function keyword |
-| `"input"` | `INPUT` | Input function keyword |
-| `[0-9]+\.[0-9]+` | `FLOATLIT` | Float literal (e.g., 3.14) |
+| `"show"` | `SHOW` | Print function keyword |
+| `"ask"` | `ASK` | Input function keyword |
 | `[0-9]+` | `NUM` | Integer literal (e.g., 42) |
 | `'[^']'` | `CHARLIT` | Character literal (e.g., 'A') |
 | `[a-zA-Z][a-zA-Z0-9_]*` | `ID` | Identifier (variable name) |
@@ -32,26 +30,30 @@ The lexer performs lexical analysis, converting raw text input into tokens that 
 | `"-"` | `MINUS` | Subtraction operator |
 | `"*"` | `MULT` | Multiplication operator |
 | `"/"` | `DIV` | Division operator |
+| `"%"` | `MOD` | Modulo operator |
+| `"<"` | `LT` | Less than operator |
+| `">"` | `GT` | Greater than operator |
+| `"<="` | `LTE` | Less than or equal operator |
+| `">="` | `GTE` | Greater than or equal operator |
+| `"=="` | `EQ` | Equality operator |
+| `"!="` | `NEQ` | Not equal operator |
 | `"("` | `LPAREN` | Left parenthesis |
 | `")"` | `RPAREN` | Right parenthesis |
+| `","` | `COMMA` | Comma separator |
+| `"!"` | `EXCLAIM` | Statement terminator |
+| `"#"` | (comment) | Comment start (ignored to EOL) |
 | `[ \t\r]` | (ignored) | Whitespace |
-| `\n` | `NEWLINE` | Newline character |
-| `<<EOF>>` | `NEWLINE` then 0 | End of file handling |
+| `<<EOF>>` | 0 | End of file |
 
-### EOF Handling Logic
+### Statement Terminator
 
-The lexer uses a special EOF rule to ensure proper termination:
+JNR v4.2 uses `!` (exclamation mark) as the statement terminator instead of newlines:
 
 ```c
-<<EOF>> { static int once = 0; if (!once) { once = 1; return NEWLINE; } else { return 0; } }
+"!"  { return EXCLAIM; }
 ```
 
-**How it works:**
-1. First EOF encounter: Returns `NEWLINE` to terminate the last statement
-2. Second EOF encounter: Returns 0 (real EOF signal)
-3. Static variable `once` ensures this happens only once per input
-
-**Why needed:** The parser expects every statement to end with NEWLINE. Without this, files lacking a trailing newline would cause syntax errors.
+**Design rationale:** The `!` terminator gives JNR a unique, energetic syntax that distinguishes it from other languages while maintaining clarity.
 
 ## Parser (jnr.y)
 
@@ -59,7 +61,7 @@ The lexer uses a special EOF rule to ensure proper termination:
 
 **Data Structure:**
 ```c
-enum VarType { TYPE_INT, TYPE_CHAR, TYPE_FLOAT };
+enum VarType { TYPE_INT, TYPE_CHAR };
 
 struct Symbol {
     char name[50];       // Variable name
@@ -67,7 +69,6 @@ struct Symbol {
     union {              // Value storage (only one active at a time)
         int intval;
         char charval;
-        float floatval;
     } value;
 };
 ```
@@ -76,6 +77,7 @@ struct Symbol {
 - **Union for values**: Memory efficient - stores only one value type per variable
 - **Enum for types**: Type-safe type tracking
 - **Array-based**: Simple implementation, supports 100 variables
+- **Simplified types**: JNR v4.2 supports only `int` and `char` (float removed)
 
 ### Symbol Table Functions
 
@@ -90,21 +92,17 @@ Creates or updates an integer variable.
 #### `set_symbol_char(char* name, char val)`
 Same logic as `set_symbol_int` but for character type.
 
-#### `set_symbol_float(char* name, float val)`
-Same logic as `set_symbol_int` but for float type.
-
 #### `get_symbol(char* name)`
-Retrieves variable value (always returns as float for arithmetic).
+Retrieves variable value (always returns as int for arithmetic).
 
 **Logic:**
 1. Search symbol table for variable
-2. Convert value to float based on type:
-   - INT: `(float)intval`
-   - CHAR: `(float)charval` (ASCII value)
-   - FLOAT: `floatval` (no conversion)
+2. Convert value to int based on type:
+   - INT: `intval` (no conversion)
+   - CHAR: `(int)charval` (ASCII value)
 3. If not found: Print error and exit
 
-**Why return float:** Allows mixed-type arithmetic operations.
+**Why return int:** All arithmetic operations work with integers in JNR v4.2.
 
 ### Grammar Rules
 
@@ -112,20 +110,35 @@ Retrieves variable value (always returns as float for arithmetic).
 ```
 program → statement_list
 statement_list → statement_list statement | statement
-statement → declaration | assignment | print_func | input_func | NEWLINE
+statement → declaration EXCLAIM | assignment EXCLAIM | print_func EXCLAIM | input_func EXCLAIM
 ```
 
-**Logic:** A program is a list of statements. Statements can optionally be followed by NEWLINE.
+**Logic:** A program is a list of statements. All statements must end with `!` (EXCLAIM token).
 
 #### Declarations
 ```
-declaration → INT ID ASSIGN expr
-            | CHAR ID ASSIGN CHARLIT
+declaration → INT var_list_int
+            | CHAR var_list_char
+
+var_list_int → ID
+             | ID ASSIGN expr
+             | var_list_int COMMA ID
+             | var_list_int COMMA ID ASSIGN expr
+
+var_list_char → ID
+              | ID ASSIGN CHARLIT
+              | var_list_char COMMA ID
+              | var_list_char COMMA ID ASSIGN CHARLIT
 ```
 
 **Semantic Actions:**
-- `INT ID = expr`: Call `set_symbol_int()` with identifier and expression value
-- `CHAR ID = 'c'`: Call `set_symbol_char()` with identifier and character
+- `INT x = expr`: Call `set_symbol_int()` with identifier and expression value
+- `INT x`: Call `set_symbol_int()` with identifier and default value 0
+- `INT x = 10, y, z = 30`: Multiple comma-separated declarations
+- `CHAR c = 'A'`: Call `set_symbol_char()` with identifier and character
+- `CHAR a, b = 'B'`: Multiple character declarations with optional initialization
+
+**Comma-separated declarations:** JNR v4.1+ supports declaring multiple variables of the same type in one statement, reducing code repetition.
 
 #### Assignments
 ```
@@ -141,15 +154,15 @@ assignment → ID ASSIGN expr
 
 #### Print Function
 ```
-print_func → PRINT LPAREN expr RPAREN
-           | PRINT LPAREN CHARLIT RPAREN
-           | PRINT LPAREN ID RPAREN
+print_func → SHOW LPAREN expr RPAREN
+           | SHOW LPAREN CHARLIT RPAREN
+           | SHOW LPAREN ID RPAREN
 ```
 
 **Three variants:**
-1. **`print(expr)`**: Evaluate expression and print as float (%.2f)
-2. **`print('c')`**: Print character literal
-3. **`print(var)`**: Look up variable and print based on its type:
+1. **`show(expr)`**: Evaluate expression and print as integer (%d)
+2. **`show('c')`**: Print character literal
+3. **`show(var)`**: Look up variable and print based on its type:
    - INT: Format as `%d`
    - CHAR: Format as `%c`
 
@@ -157,7 +170,7 @@ print_func → PRINT LPAREN expr RPAREN
 
 #### Input Function
 ```
-input_func → INPUT LPAREN ID RPAREN
+input_func → ASK LPAREN ID RPAREN
 ```
 
 **Logic:**
@@ -169,27 +182,37 @@ input_func → INPUT LPAREN ID RPAREN
 
 #### Expressions
 ```
-expr → NUM | FLOATLIT | ID
+expr → NUM | ID
      | expr PLUS expr
      | expr MINUS expr
      | expr MULT expr
      | expr DIV expr
+     | expr MOD expr
+     | expr LT expr
+     | expr GT expr
+     | expr LTE expr
+     | expr GTE expr
+     | expr EQ expr
+     | expr NEQ expr
      | LPAREN expr RPAREN
 ```
 
 **Evaluation:**
-- All expressions evaluate to float type
-- Numeric literals are converted: `(float)NUM`
-- Variables are retrieved via `get_symbol()` (returns float)
-- Operators perform standard arithmetic
+- All expressions evaluate to int type
+- Numeric literals are integers: `NUM`
+- Variables are retrieved via `get_symbol()` (returns int)
+- Arithmetic operators perform standard operations
+- Comparison operators return 1 (true) or 0 (false)
 - Division by zero is checked: `if($3 == 0) { error }`
 - Parentheses control precedence: `(expr)` returns inner value
 
 **Operator Precedence:**
 Defined using Bison left-associativity directives:
 ```
-%left PLUS MINUS      // Lower precedence
-%left MULT DIV        // Higher precedence
+%left EQ NEQ          // Lowest precedence
+%left LT GT LTE GTE
+%left PLUS MINUS
+%left MULT DIV MOD    // Highest precedence
 ```
 
 Result: `2 + 3 * 4` evaluates as `2 + (3 * 4) = 14`
@@ -225,17 +248,17 @@ Result: `2 + 3 * 4` evaluates as `2 + (3 * 4) = 14`
 - Print function outputs based on type
 
 ### Type Coercion
-- All expressions internally use float
+- All expressions internally use int
 - Automatic conversions:
-  - INT → FLOAT: `(float)intval`
-  - CHAR → FLOAT: `(float)charval` (ASCII)
-  - FLOAT → INT: `(int)floatval` (truncation)
+  - INT → INT: No conversion needed
+  - CHAR → INT: `(int)charval` (ASCII value)
 
 ### Example Type Flow
 ```
-int x = 10        // x stored as TYPE_INT, value.intval = 10
-float y = 3.14    // y stored as TYPE_FLOAT, value.floatval = 3.14
-print(x + y)      // x:(float)10 + y:3.14 = 13.14, print as %.2f
+int x = 10, y = 20!   // x and y stored as TYPE_INT
+show(x + y)!          // x:10 + y:20 = 30, print as %d
+char c = 'A'!         // c stored as TYPE_CHAR, value.charval = 'A'
+show(c)!              // Print 'A' as character
 ```
 
 ## Memory Management
@@ -292,10 +315,10 @@ The interpreter provides minimal error recovery:
 - **Type safety:** Enforced by `enum VarType`
 - **Performance:** No dynamic allocation
 
-### Why Float for Expressions?
-- **Mixed arithmetic:** Allows `int + float`
-- **Precision:** No loss for int/char operations
-- **Simplicity:** Single evaluation type
+### Why Int for Expressions?
+- **Simplicity:** Single evaluation type (integers only)
+- **Educational focus:** Avoids floating-point precision issues
+- **Performance:** Integer arithmetic is faster and more predictable
 
 ### Why Static Symbol Table?
 - **Simplicity:** Easy to understand and debug
@@ -333,11 +356,12 @@ Output
 
 ### Unit Tests
 - `test.jnr`: Basic arithmetic
-- `test_types.jnr`: All three types
+- `test_types.jnr`: Integer and character types
 - `test_int.jnr`: Integer operations
 - `test_char.jnr`: Character handling
-- `test_float.jnr`: Float calculations
+- `test_comma_declarations.jnr`: Comma-separated declarations
+- `test_allowed_operators.jnr`: All supported operators
 
 ### Integration Tests
 - `make test-all`: Runs all tests sequentially
-- Verifies: Lexing, parsing, type system, I/O
+- Verifies: Lexing, parsing, type system, I/O, comma declarations

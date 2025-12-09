@@ -5,19 +5,20 @@ Welcome! This guide will help you install and use the **jnr programming language
 ## What is jnr?
 
 jnr is a simple programming language where you can:
-- Store numbers (integers, decimals)
+- Store whole numbers (integers)
 - Store letters and symbols (characters)
-- Do math (addition, subtraction, multiplication, division)
+- Do math (addition, subtraction, multiplication, division, modulo)
+- Compare values (less than, greater than, equal to, etc.)
 - Display results on your screen
 - Ask users for input
 - Write comments to document your code
 
 **What makes jnr unique?**
 - Uses `!` instead of `;` to end statements (energetic!)
-- Uses `real` instead of `float` for decimal numbers
 - Uses `show()` to display output
 - Uses `ask()` to get input
 - Supports `#` comments like Python
+- Supports comma-separated variable declarations
 
 ---
 
@@ -191,9 +192,9 @@ Let's create a simple program!
 
 2. **Type this code:**
    ```
-   int x = 10
-   int y = 20
-   print(x + y)
+   int x = 10!
+   int y = 20!
+   show(x + y)!
    ```
 
 3. **Save the file:**
@@ -269,13 +270,7 @@ show(grade)!
 ```
 **Output:** `A`
 
-#### 3. Real Numbers (Decimals)
-```
-real price = 19.99!
-real pi = 3.14!
-show(price)!
-```
-**Output:** `19.99`
+**Note:** JNR v4.2 supports only `int` and `char` types. For decimal calculations, use scaled integers (e.g., multiply by 100 to represent cents).
 
 ### Doing Math
 
@@ -287,11 +282,13 @@ int sum = a + b!
 int diff = a - b!
 int product = a * b!
 int quotient = a / b!
+int remainder = a % b!
 
 show(sum)!
 show(diff)!
 show(product)!
 show(quotient)!
+show(remainder)!
 ```
 
 **Output:**
@@ -300,15 +297,16 @@ show(quotient)!
 5
 50
 2
+0
 ```
 
 ### Using the Show Function
 
 ```
-show(10)!              # Prints: 10.00
+show(10)!              # Prints: 10
 show('A')!             # Prints: A
-show(5 + 3)!           # Prints: 8.00
-show((10 + 5) * 2)!    # Prints: 30.00
+show(5 + 3)!           # Prints: 8
+show((10 + 5) * 2)!    # Prints: 30
 ```
 
 ### Adding Comments
@@ -331,29 +329,30 @@ int age = current_year - birth_year!
 show(age)!
 ```
 
-### Example 2: Temperature Conversion (Approximation)
+### Example 2: Comparison Operations
 ```
-real celsius = 25.0!
-real fahrenheit = celsius * 2.0!
-show(fahrenheit)!
-```
-
-### Example 3: Circle Area
-```
-real pi = 3.14159!
-real radius = 5.0!
-real area = pi * radius * radius!
-show(area)!
+int a = 10!
+int b = 5!
+int is_greater = a > b!
+show(is_greater)!  # Prints: 1 (true)
 ```
 
-### Example 4: Shopping Total
+### Example 3: Comma-Separated Declarations
 ```
-# Calculate shopping cart total
-real item1 = 12.99!
-real item2 = 8.50!
-real item3 = 5.25!
-real total = item1 + item2 + item3!
-show(total)!
+# Declare multiple variables at once
+int x = 100, y = 200, z = 300!
+int sum = x + y + z!
+show(sum)!  # Prints: 600
+```
+
+### Example 4: Using Scaled Integers for Prices
+```
+# Represent prices in cents to avoid decimals
+int item1 = 1299!  # $12.99 in cents
+int item2 = 850!   # $8.50 in cents
+int item3 = 525!   # $5.25 in cents
+int total = item1 + item2 + item3!
+show(total)!       # Prints: 2674 (cents) = $26.74
 ```
 
 ---
@@ -365,8 +364,8 @@ The jnr project comes with example programs you can try:
 ```bash
 ./jnr < tests/test_int.jnr       # Integer operations
 ./jnr < tests/test_char.jnr      # Character handling
-./jnr < tests/test_float.jnr     # Float calculations
 ./jnr < tests/test_types.jnr     # All types together
+./jnr < tests/test_comma_declarations.jnr  # Comma-separated declarations
 ```
 
 Or run all tests at once:
@@ -451,7 +450,10 @@ They tell you what's wrong:
 ```
 int name = value!      # For whole numbers
 char name = 'x'!       # For single characters
-real name = value!     # For decimal numbers
+
+# Comma-separated declarations
+int x = 10, y = 20, z!  # z defaults to 0
+char a = 'A', b, c = 'C'!  # b defaults to '\0'
 ```
 
 ### Math Operators
@@ -462,6 +464,16 @@ real name = value!     # For decimal numbers
 /    Division
 %    Modulo (remainder)
 ()   Parentheses for order
+```
+
+### Comparison Operators
+```
+<    Less than
+>    Greater than
+<=   Less than or equal
+>=   Greater than or equal
+==   Equal to
+!=   Not equal to
 ```
 
 ### Functions
@@ -509,10 +521,11 @@ If you get stuck:
 - [ ] Created your first program
 - [ ] Successfully ran the program
 - [ ] Tried the example programs
-- [ ] Understand the three data types (int, char, real)
-- [ ] Can do basic math operations
+- [ ] Understand the two data types (int, char)
+- [ ] Can do basic math and comparison operations
 - [ ] Know how to use `show()` and `ask()`
 - [ ] Can write comments with `#`
+- [ ] Understand comma-separated declarations
 
 **Congratulations! You're now a jnr programmer!** 🎉
 
