@@ -1,7 +1,7 @@
 # jnr Language - Context-Free Grammar
 
 > [!IMPORTANT]
-> **Updated for JNR v4.1** - Now supports comma-separated variable declarations! Features `!` statement terminator, `real` keyword, `show()`/`ask()` functions, and `#` comments. Declare multiple variables in one statement: `int x=1, y, z=3!`
+> **Updated for JNR v4.2** - Now supports comma-separated variable declarations with simplified type system! Features `!` statement terminator, `show()`/`ask()` functions, and `#` comments. Supports only `int` and `char` types. Declare multiple variables in one statement: `int x=1, y, z=3!`
 
 This document presents the formal Context-Free Grammar (CFG) for the jnr programming language in multiple formats.
 
@@ -24,7 +24,6 @@ This document presents the formal Context-Free Grammar (CFG) for the jnr program
 
 <declaration>    ::= "int" <var-list-int>
                    | "char" <var-list-char>
-                   | "real" <var-list-real>
 
 <var-list-int>   ::= IDENTIFIER
                    | IDENTIFIER "=" <expression>
@@ -35,11 +34,6 @@ This document presents the formal Context-Free Grammar (CFG) for the jnr program
                    | IDENTIFIER "=" CHAR-LITERAL
                    | <var-list-char> "," IDENTIFIER
                    | <var-list-char> "," IDENTIFIER "=" CHAR-LITERAL
-
-<var-list-real>  ::= IDENTIFIER
-                   | IDENTIFIER "=" <expression>
-                   | <var-list-real> "," IDENTIFIER
-                   | <var-list-real> "," IDENTIFIER "=" <expression>
 
 <assignment>     ::= IDENTIFIER "=" <expression>
 
@@ -62,12 +56,10 @@ This document presents the formal Context-Free Grammar (CFG) for the jnr program
                    | <expression> "!=" <expression>
                    | "(" <expression> ")"
                    | NUMBER
-                   | FLOAT-LITERAL
                    | IDENTIFIER
 
 IDENTIFIER       ::= LETTER (LETTER | DIGIT | "_")*
 NUMBER           ::= DIGIT+
-FLOAT-LITERAL    ::= DIGIT+ "." DIGIT+
 CHAR-LITERAL     ::= "'" CHARACTER "'"
 EXCLAIM          ::= "!"
 COMMENT          ::= "#" (any character)* NEWLINE
@@ -144,10 +136,10 @@ All comparison operators return 1 for true, 0 for false.
 > [!NOTE]
 > **Simplified for Education**
 > 
-> JNR v4.0 has been simplified by removing bitwise and logical operators. The language now focuses on:
+> JNR v4.2 has been simplified by removing bitwise, logical operators, and floating-point types. The language now focuses on:
 > - Arithmetic operations for mathematical calculations
 > - Comparison operators for conditional logic
-> - Type-safe variable declarations (int, char, real)
+> - Type-safe variable declarations (int, char only)
 > - Unique syntax with `!` terminator and `show()`/`ask()` functions
 
 ---
@@ -321,10 +313,9 @@ Operators declared later have higher precedence. All operators are left-associat
 
 ### Type Handling
 
-- All expressions evaluate to `float` type
-- Bitwise, logical, and shift operations cast operands to `int`
-- Results are cast back to `float` for consistency
-- Comparison and logical operators return `1.0` (true) or `0.0` (false)
+- All expressions evaluate to `int` type
+- Comparison operators return `1` (true) or `0` (false)
+- Character values are cast to integers when used in expressions
 
 ---
 
@@ -336,7 +327,6 @@ JNR uses `!` instead of `;` for statement termination, giving the language an en
 ### Keywords
 - `int` - Integer type (whole numbers)
 - `char` - Character type (single characters)
-- `real` - Real number type (decimals, replaces traditional `float`)
 
 ### I/O Functions
 - `show()` - Display output (replaces `print`)
@@ -353,8 +343,8 @@ int x = 10!  # Comments can also go at the end of lines
 
 ## 10. Conclusion
 
-This Context-Free Grammar defines the complete syntax of the jnr programming language v4.1. It supports:
-- Three data types (int, char, real)
+This Context-Free Grammar defines the complete syntax of the jnr programming language v4.2. It supports:
+- Two data types (int, char)
 - **Comma-separated variable declarations** (e.g., `int x=1, y, z=3!`)
 - Unique syntax with `!` terminator and `show()`/`ask()` functions
 - Hash-style comments for code documentation
@@ -363,4 +353,4 @@ This Context-Free Grammar defines the complete syntax of the jnr programming lan
 - Proper operator precedence for educational clarity
 - Type-safe variable declarations with optional initialization
 
-The grammar is implemented using Bison/Yacc with LALR(1) parsing and has been enhanced in v4.1 to support comma-separated variable declarations, reducing code repetition while maintaining backward compatibility with single-variable declarations.
+The grammar is implemented using Bison/Yacc with LALR(1) parsing. Version 4.2 simplifies the type system by removing floating-point operations, focusing on integer and character types only for educational clarity.

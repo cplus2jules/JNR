@@ -121,13 +121,11 @@ statement → declaration | assignment | print_func | input_func | NEWLINE
 ```
 declaration → INT ID ASSIGN expr
             | CHAR ID ASSIGN CHARLIT
-            | FLOAT ID ASSIGN expr
 ```
 
 **Semantic Actions:**
 - `INT ID = expr`: Call `set_symbol_int()` with identifier and expression value
 - `CHAR ID = 'c'`: Call `set_symbol_char()` with identifier and character
-- `FLOAT ID = expr`: Call `set_symbol_float()` with identifier and expression value
 
 #### Assignments
 ```
@@ -154,7 +152,6 @@ print_func → PRINT LPAREN expr RPAREN
 3. **`print(var)`**: Look up variable and print based on its type:
    - INT: Format as `%d`
    - CHAR: Format as `%c`
-   - FLOAT: Format as `%.2f`
 
 **Type-aware output:** The third variant uses a switch statement on the variable's type.
 
