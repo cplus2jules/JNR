@@ -83,10 +83,10 @@ enum VarType get_symbol_type(char* name) {
 %token <number> NUM
 %token <charval> CHARLIT
 %token <string> ID
-%token INT CHAR SHOW ASK ASSIGN EXCLAIM COMMA
+%token START INT CHAR SHOW ASK ASSIGN EXCLAIM COMMA
 %token PLUS MINUS MULT DIV MOD
 %token LT GT LTE GTE EQ NEQ
-%token LPAREN RPAREN
+%token LPAREN RPAREN LBRACE RBRACE
 
 %left EQ NEQ
 %left LT GT LTE GTE
@@ -98,7 +98,7 @@ enum VarType get_symbol_type(char* name) {
 %%
 
 program:
-    statement_list
+    START LPAREN RPAREN LBRACE statement_list RBRACE
     ;
 
 statement_list:

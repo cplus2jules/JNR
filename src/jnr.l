@@ -6,6 +6,7 @@
 
 %%
 
+"start"                 { return START; }
 "int"                   { return INT; }
 "char"                  { return CHAR; }
 "show"                  { return SHOW; }
@@ -30,6 +31,8 @@
 ">"                     { return GT; }
 "("                     { return LPAREN; }
 ")"                     { return RPAREN; }
+"{"                     { return LBRACE; }
+"}"                     { return RBRACE; }
 "!"                     { return EXCLAIM; }
 ","                     { return COMMA; }
 

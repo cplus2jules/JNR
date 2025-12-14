@@ -41,7 +41,7 @@ jnr/
 ## Grammar (BNF)
 
 ```
-PROGRAM        → STATEMENT_LIST
+PROGRAM        → 'start' '(' ')' '{' STATEMENT_LIST '}'
 STATEMENT_LIST → STATEMENT | STATEMENT_LIST STATEMENT
 STATEMENT      → DECLARATION '!' | ASSIGNMENT '!' | PRINT_FUNC '!' | INPUT_FUNC '!'
 DECLARATION    → 'int' VAR_LIST_INT
@@ -130,20 +130,22 @@ For programs using `ask()`, you have two options:
 
 ### Type Declarations with Comma-Separated Variables
 ```
-# Multiple variables in one statement
-int x = 10, y = 5, sum!
-sum = x + y!
-show(sum)!
+start() {
+    # Multiple variables in one statement
+    int x = 10, y = 5, sum!
+    sum = x + y!
+    show(sum)!
 
-# Character type
-char c = 'A'!
-show(c)!
+    # Character type
+    char c = 'A'!
+    show(c)!
 
-# Mixed initialization
-int a = 100, b, c = 200!
-show(a)!  # 100
-show(b)!  # 0 (default)
-show(c)!  # 200
+    # Mixed initialization
+    int a = 100, b, c = 200!
+    show(a)!  # 100
+    show(b)!  # 0 (default)
+    show(c)!  # 200
+}
 ```
 
 ### Output:
@@ -167,6 +169,7 @@ Welcome to jnr! (Type your code, Press Ctrl+D to run)
 
 ## Notes
 
+- **All programs must be wrapped in `start() { ... }`** - This is required structure
 - Programs using `ask()` are best run in interactive mode
 - The `ask()` function reads integers from stdin  
 - Use file mode (`./jnr < file.jnr`) for programs without input
@@ -175,7 +178,7 @@ Welcome to jnr! (Type your code, Press Ctrl+D to run)
 - Variables can be any identifier starting with a letter
 - Statements must end with `!` exclamation mark
 - Comments start with `#` and continue to end of line
-- **JNR v4.2** supports only `int` and `char` types (float removed for simplicity)
+- **JNR v5.0** requires `start() {}` structure and supports only `int` and `char` types
 
 ## Documentation
 

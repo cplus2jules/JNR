@@ -42,52 +42,58 @@
      NUM = 258,
      CHARLIT = 259,
      ID = 260,
-     INT = 261,
-     CHAR = 262,
-     SHOW = 263,
-     ASK = 264,
-     ASSIGN = 265,
-     EXCLAIM = 266,
-     COMMA = 267,
-     PLUS = 268,
-     MINUS = 269,
-     MULT = 270,
-     DIV = 271,
-     MOD = 272,
-     LT = 273,
-     GT = 274,
-     LTE = 275,
-     GTE = 276,
-     EQ = 277,
-     NEQ = 278,
-     LPAREN = 279,
-     RPAREN = 280
+     START = 261,
+     INT = 262,
+     CHAR = 263,
+     SHOW = 264,
+     ASK = 265,
+     ASSIGN = 266,
+     EXCLAIM = 267,
+     COMMA = 268,
+     PLUS = 269,
+     MINUS = 270,
+     MULT = 271,
+     DIV = 272,
+     MOD = 273,
+     LT = 274,
+     GT = 275,
+     LTE = 276,
+     GTE = 277,
+     EQ = 278,
+     NEQ = 279,
+     LPAREN = 280,
+     RPAREN = 281,
+     LBRACE = 282,
+     RBRACE = 283
    };
 #endif
 /* Tokens.  */
 #define NUM 258
 #define CHARLIT 259
 #define ID 260
-#define INT 261
-#define CHAR 262
-#define SHOW 263
-#define ASK 264
-#define ASSIGN 265
-#define EXCLAIM 266
-#define COMMA 267
-#define PLUS 268
-#define MINUS 269
-#define MULT 270
-#define DIV 271
-#define MOD 272
-#define LT 273
-#define GT 274
-#define LTE 275
-#define GTE 276
-#define EQ 277
-#define NEQ 278
-#define LPAREN 279
-#define RPAREN 280
+#define START 261
+#define INT 262
+#define CHAR 263
+#define SHOW 264
+#define ASK 265
+#define ASSIGN 266
+#define EXCLAIM 267
+#define COMMA 268
+#define PLUS 269
+#define MINUS 270
+#define MULT 271
+#define DIV 272
+#define MOD 273
+#define LT 274
+#define GT 275
+#define LTE 276
+#define GTE 277
+#define EQ 278
+#define NEQ 279
+#define LPAREN 280
+#define RPAREN 281
+#define LBRACE 282
+#define RBRACE 283
 
 
 
@@ -101,7 +107,7 @@ typedef union YYSTYPE
     char* string;
 }
 /* Line 1529 of yacc.c.  */
-#line 105 "jnr.tab.h"
+#line 111 "jnr.tab.h"
 	YYSTYPE;
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */
 # define YYSTYPE_IS_DECLARED 1
