@@ -87,9 +87,10 @@ enum VarType get_symbol_type(char* name) {
 %token PLUS MINUS MULT DIV
 %token LPAREN RPAREN LBRACE RBRACE
 
-%expect 1
+%left PLUS MINUS
+%left MULT DIV
 
-%type <number> expr term factor
+%type <number> expr
 
 %%
 
@@ -114,17 +115,17 @@ declaration:
     ;
 
 var_list_int:
-    ID ASSIGN expr COMMA var_list_int   { set_symbol_int($1, (int)$3); }
-    | ID COMMA var_list_int             { set_symbol_int($1, 0); }
-    | ID ASSIGN expr                    { set_symbol_int($1, (int)$3); }
+    ID ASSIGN expr                      { set_symbol_int($1, (int)$3); }
     | ID                                { set_symbol_int($1, 0); }
+    | var_list_int COMMA ID ASSIGN expr { set_symbol_int($3, (int)$5); }
+    | var_list_int COMMA ID             { set_symbol_int($3, 0); }
     ;
 
 var_list_char:
-    ID ASSIGN CHARLIT COMMA var_list_char   { set_symbol_char($1, $3); }
-    | ID COMMA var_list_char                { set_symbol_char($1, '\0'); }
-    | ID ASSIGN CHARLIT                     { set_symbol_char($1, $3); }
+    ID ASSIGN CHARLIT                       { set_symbol_char($1, $3); }
     | ID                                    { set_symbol_char($1, '\0'); }
+    | var_list_char COMMA ID ASSIGN CHARLIT { set_symbol_char($3, $5); }
+    | var_list_char COMMA ID                { set_symbol_char($3, '\0'); }
     ;
 
 
@@ -174,24 +175,18 @@ print_func:
     }
     ;
 
-expr:
-    term                    { $$ = $1; }
-    | expr PLUS term        { $$ = $1 + $3; }
-    | expr MINUS term       { $$ = $1 - $3; }
-    ;
 
-term:
-    factor                  { $$ = $1; }
-    | term MULT factor      { $$ = $1 * $3; }
-    | term DIV factor       { 
+
+expr:
+    NUM                     { $$ = $1; }
+    | ID                    { $$ = get_symbol($1); }
+    | expr PLUS expr        { $$ = $1 + $3; }
+    | expr MINUS expr       { $$ = $1 - $3; }
+    | expr MULT expr        { $$ = $1 * $3; }
+    | expr DIV expr         { 
         if($3 == 0) { printf("Error: Division by zero\n"); exit(1); }
         $$ = $1 / $3; 
     }
-    ;
-
-factor:
-    NUM                     { $$ = $1; }
-    | ID                    { $$ = get_symbol($1); }
     | LPAREN expr RPAREN    { $$ = $2; }
     ;
 

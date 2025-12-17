@@ -47,13 +47,6 @@ This document presents the formal Context-Free Grammar (CFG) for the jnr program
                    | <expression> "-" <expression>
                    | <expression> "*" <expression>
                    | <expression> "/" <expression>
-                   | <expression> "%" <expression>
-                   | <expression> "<" <expression>
-                   | <expression> ">" <expression>
-                   | <expression> "<=" <expression>
-                   | <expression> ">=" <expression>
-                   | <expression> "==" <expression>
-                   | <expression> "!=" <expression>
                    | "(" <expression> ")"
                    | NUMBER
                    | IDENTIFIER
@@ -77,7 +70,7 @@ CHARACTER        ::= any printable character except "'"
 | Level | Operators | Associativity | Description |
 |-------|-----------|---------------|-------------|
 | 6 (Highest) | `( )` | N/A | Parentheses |
-| 5 | `*` `/` `%` | Left | Multiplication, Division, Modulo |
+| 5 | `*` `/` `%` | Left | Multiplication, Division |
 | 4 | `+` `-` | Left | Addition, Subtraction |
 | 3 | `<` `>` `<=` `>=` | Left | Relational Comparison |
 | 2 | `==` `!=` | Left | Equality Comparison |
@@ -95,7 +88,6 @@ Parses as: `2 + (3 * 4)` = `2 + 12` = `14`
 - `-` : Subtraction
 - `*` : Multiplication
 - `/` : Division
-- `%` : Modulo (remainder)
 
 ### Comparison Operators
 - `<` : Less than
@@ -306,7 +298,7 @@ The grammar uses Bison's `%left` declarations to specify operator precedence:
 %left EQ NEQ          // Lowest precedence
 %left LT GT LTE GTE
 %left PLUS MINUS
-%left MULT DIV MOD    // Highest precedence
+%left MULT DIV    // Highest precedence
 ```
 
 Operators declared later have higher precedence. All operators are left-associative.

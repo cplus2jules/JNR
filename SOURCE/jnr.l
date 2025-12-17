@@ -4,9 +4,6 @@
 #include "jnr.tab.h"
 %}
 
-%option nounput
-%option noinput
-
 %%
 
 "start"                 { return START; }

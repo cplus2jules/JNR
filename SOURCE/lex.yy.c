@@ -473,8 +473,7 @@ char *yytext;
 #include <string.h>
 #include "jnr.tab.h"
 #line 475 "lex.yy.c"
-#define YY_NO_INPUT 1
-#line 477 "lex.yy.c"
+#line 476 "lex.yy.c"
 
 #define INITIAL 0
 
@@ -534,6 +533,8 @@ extern int yywrap ( void );
 #endif
 
 #ifndef YY_NO_UNPUT
+    
+    static void yyunput ( int c, char *buf_ptr  );
     
 #endif
 
@@ -689,10 +690,10 @@ YY_DECL
 		}
 
 	{
-#line 10 "src/jnr.l"
+#line 7 "src/jnr.l"
 
 
-#line 695 "lex.yy.c"
+#line 696 "lex.yy.c"
 
 	while ( /*CONSTCOND*/1 )		/* loops until end-of-file is reached */
 		{
@@ -751,117 +752,117 @@ do_action:	/* This label is used only to access EOF actions. */
 
 case 1:
 YY_RULE_SETUP
-#line 12 "src/jnr.l"
+#line 9 "src/jnr.l"
 { return START; }
 	YY_BREAK
 case 2:
 YY_RULE_SETUP
-#line 13 "src/jnr.l"
+#line 10 "src/jnr.l"
 { return INT; }
 	YY_BREAK
 case 3:
 YY_RULE_SETUP
-#line 14 "src/jnr.l"
+#line 11 "src/jnr.l"
 { return CHAR; }
 	YY_BREAK
 case 4:
 YY_RULE_SETUP
-#line 15 "src/jnr.l"
+#line 12 "src/jnr.l"
 { return SHOW; }
 	YY_BREAK
 case 5:
 YY_RULE_SETUP
-#line 17 "src/jnr.l"
+#line 14 "src/jnr.l"
 { yylval.number = atoi(yytext); return NUM; }
 	YY_BREAK
 case 6:
 /* rule 6 can match eol */
 YY_RULE_SETUP
-#line 18 "src/jnr.l"
+#line 15 "src/jnr.l"
 { yylval.charval = yytext[1]; return CHARLIT; }
 	YY_BREAK
 case 7:
 YY_RULE_SETUP
-#line 19 "src/jnr.l"
+#line 16 "src/jnr.l"
 { yylval.string = strdup(yytext); return ID; }
 	YY_BREAK
 case 8:
 YY_RULE_SETUP
-#line 21 "src/jnr.l"
+#line 18 "src/jnr.l"
 { return ASSIGN; }
 	YY_BREAK
 case 9:
 YY_RULE_SETUP
-#line 22 "src/jnr.l"
+#line 19 "src/jnr.l"
 { return PLUS; }
 	YY_BREAK
 case 10:
 YY_RULE_SETUP
-#line 23 "src/jnr.l"
+#line 20 "src/jnr.l"
 { return MINUS; }
 	YY_BREAK
 case 11:
 YY_RULE_SETUP
-#line 24 "src/jnr.l"
+#line 21 "src/jnr.l"
 { return MULT; }
 	YY_BREAK
 case 12:
 YY_RULE_SETUP
-#line 25 "src/jnr.l"
+#line 22 "src/jnr.l"
 { return DIV; }
 	YY_BREAK
 case 13:
 YY_RULE_SETUP
-#line 26 "src/jnr.l"
+#line 23 "src/jnr.l"
 { return LPAREN; }
 	YY_BREAK
 case 14:
 YY_RULE_SETUP
-#line 27 "src/jnr.l"
+#line 24 "src/jnr.l"
 { return RPAREN; }
 	YY_BREAK
 case 15:
 YY_RULE_SETUP
-#line 28 "src/jnr.l"
+#line 25 "src/jnr.l"
 { return LBRACE; }
 	YY_BREAK
 case 16:
 YY_RULE_SETUP
-#line 29 "src/jnr.l"
+#line 26 "src/jnr.l"
 { return RBRACE; }
 	YY_BREAK
 case 17:
 YY_RULE_SETUP
-#line 30 "src/jnr.l"
+#line 27 "src/jnr.l"
 { return EXCLAIM; }
 	YY_BREAK
 case 18:
 YY_RULE_SETUP
-#line 31 "src/jnr.l"
+#line 28 "src/jnr.l"
 { return COMMA; }
 	YY_BREAK
 case 19:
 YY_RULE_SETUP
-#line 33 "src/jnr.l"
+#line 30 "src/jnr.l"
 ;  /* Hash comments */
 	YY_BREAK
 case 20:
 /* rule 20 can match eol */
 YY_RULE_SETUP
-#line 34 "src/jnr.l"
+#line 31 "src/jnr.l"
 ;
 	YY_BREAK
 case 21:
 YY_RULE_SETUP
-#line 35 "src/jnr.l"
+#line 32 "src/jnr.l"
 { return yytext[0]; }
 	YY_BREAK
 case 22:
 YY_RULE_SETUP
-#line 37 "src/jnr.l"
+#line 34 "src/jnr.l"
 ECHO;
 	YY_BREAK
-#line 864 "lex.yy.c"
+#line 865 "lex.yy.c"
 case YY_STATE_EOF(INITIAL):
 	yyterminate();
 
@@ -1196,6 +1197,43 @@ static int yy_get_next_buffer (void)
 }
 
 #ifndef YY_NO_UNPUT
+
+    static void yyunput (int c, char * yy_bp )
+{
+	char *yy_cp;
+    
+    yy_cp = (yy_c_buf_p);
+
+	/* undo effects of setting up yytext */
+	*yy_cp = (yy_hold_char);
+
+	if ( yy_cp < YY_CURRENT_BUFFER_LVALUE->yy_ch_buf + 2 )
+		{ /* need to shift things up to make room */
+		/* +2 for EOB chars. */
+		yy_size_t number_to_move = (yy_n_chars) + 2;
+		char *dest = &YY_CURRENT_BUFFER_LVALUE->yy_ch_buf[
+					YY_CURRENT_BUFFER_LVALUE->yy_buf_size + 2];
+		char *source =
+				&YY_CURRENT_BUFFER_LVALUE->yy_ch_buf[number_to_move];
+
+		while ( source > YY_CURRENT_BUFFER_LVALUE->yy_ch_buf )
+			*--dest = *--source;
+
+		yy_cp += (int) (dest - source);
+		yy_bp += (int) (dest - source);
+		YY_CURRENT_BUFFER_LVALUE->yy_n_chars =
+			(yy_n_chars) = (int) YY_CURRENT_BUFFER_LVALUE->yy_buf_size;
+
+		if ( yy_cp < YY_CURRENT_BUFFER_LVALUE->yy_ch_buf + 2 )
+			YY_FATAL_ERROR( "flex scanner push-back overflow" );
+		}
+
+	*--yy_cp = (char) c;
+
+	(yytext_ptr) = yy_bp;
+	(yy_hold_char) = *yy_cp;
+	(yy_c_buf_p) = yy_cp;
+}
 
 #endif
 
@@ -1829,7 +1867,7 @@ void yyfree (void * ptr )
 
 #define YYTABLES_NAME "yytables"
 
-#line 37 "src/jnr.l"
+#line 34 "src/jnr.l"
 
 
 int yywrap() { return 1; }
